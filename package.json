@@ -1,0 +1,35 @@
+{
+  "name": "pi-mqtt-led",
+  "version": "1.0.0",
+  "description": "Led control using JSON and MQTT designed for Home Assistant",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/depuits/pi-mqtt-led.git"
+  },
+  "keywords": [
+    "LED",
+    "Home",
+    "assistant",
+    "MQTT",
+    "JSON",
+    "light"
+  ],
+  "author": "depuits",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/depuits/pi-mqtt-led/issues"
+  },
+  "homepage": "https://github.com/depuits/pi-mqtt-led#readme",
+  "devDependencies": {
+    "pigpio-mock": "0.0.1"
+  },
+  "dependencies": {
+    "config": "^1.28.1",
+    "mqtt": "^2.15.0"
+  }
+}
