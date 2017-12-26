@@ -64,10 +64,10 @@ function applyState() {
 		w = 0;
 	}
 
-	r = Math.Clamp(r, 0, 255);
-	g = Math.Clamp(g, 0, 255);
-	b = Math.Clamp(b, 0, 255);
-	w = Math.Clamp(w, 0, 255);
+	r = Math.clamp(r, 0, 255);
+	g = Math.clamp(g, 0, 255);
+	b = Math.clamp(b, 0, 255);
+	w = Math.clamp(w, 0, 255);
 
 	if (includeRgb) {
 		leds.red.pwmWrite(r);
