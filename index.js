@@ -14,15 +14,23 @@ const client  = mqtt.connect({
 	password: config.get('mqttPassword')
 });
 
-Number.prototype.map = function (in_min, in_max, out_min, out_max) {
-	return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+if (!Math.map) {
+	Math.map = function (val, in_min, in_max, out_min, out_max) {
+		return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	}
+}
+if (!Math.clamp) {
+	Math.clamp = function (val, min, max) {
+		return Math.min(Math.max(min, val), max);
+	}
+
 }
 
 var state = {
-	red: 0,
-	green: 0,
-	blue: 0,
-	white: 0,
+	red: 255,
+	green: 255,
+	blue: 255,
+	white: 255,
 
 	brightness: 0,
 
@@ -45,16 +53,21 @@ function applyState() {
 	console.log (state);
 
 	if (state.on) {
-		r = state.red.map(0, 255, 0, state.brightness);
-		g = state.green.map(0, 255, 0, state.brightness);
-		b = state.blue.map(0, 255, 0, state.brightness);
-		w = state.white.map(0, 255, 0, state.brightness);
+		r = Math.map(state.red, 0, 255, 0, state.brightness);
+		g = Math.map(state.green, 0, 255, 0, state.brightness);
+		b = Math.map(state.blue, 0, 255, 0, state.brightness);
+		w = Math.map(state.white, 0, 255, 0, state.brightness);
 	} else {
 		r = 0;
 		g = 0;
 		b = 0;
 		w = 0;
 	}
+
+	r = Math.Clamp(r, 0, 255);
+	g = Math.Clamp(g, 0, 255);
+	b = Math.Clamp(b, 0, 255);
+	w = Math.Clamp(w, 0, 255);
 
 	if (includeRgb) {
 		leds.red.pwmWrite(r);
