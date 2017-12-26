@@ -1,6 +1,6 @@
 const config = require('config');
 const mqtt = require('mqtt');
-const pigpio = process.env.NODE_ENV !== 'production' ? require('pigpio-mock') : require('pigpio');
+const pigpio = config.get('debug') ? require('pigpio-mock') : require('pigpio');
 const Gpio = pigpio.Gpio;
 
 const stripType = config.get('stripType');

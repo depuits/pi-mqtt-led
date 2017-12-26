@@ -1,6 +1,8 @@
 'use strict';
 
 var config = {
+	debug: (process.env.NODE_ENV !== 'production'),
+
 	stripType: 'RGB', // options: BRIGHTNESS, RGB, RGBW
 
 	pinRed: 0,		// For RGB(W)
