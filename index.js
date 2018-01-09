@@ -3,10 +3,6 @@ const mqtt = require('mqtt');
 const pigpio = config.get('debug') ? require('pigpio-mock') : require('pigpio');
 const Gpio = pigpio.Gpio;
 
-const stripType = config.get('stripType');
-const includeRgb = (stripType === 'RGB' || stripType === 'RGBW');
-const includeWhite = (stripType === 'BRIGHTNESS' || stripType === 'RGBW');
-
 var mqttConfig = Object.assign({}, config.get('mqtt')); // we copy the config because it must be editable
 const client  = mqtt.connect(mqttConfig);
 
@@ -15,13 +11,12 @@ if (!Math.map) {
 		return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 }
-if (!Math.clamp) {
-	Math.clamp = function (val, min, max) {
-		return Math.min(Math.max(min, val), max);
-	}
-}
 
 var state = {
+	leds: {},
+	includeRgb: false,
+	includeWhite: false,
+
 	red: 255,
 	green: 255,
 	blue: 255,
@@ -30,49 +25,51 @@ var state = {
 	brightness: 0,
 
 	on: false,
+
+	init: function() {
+		const stripType = config.get('stripType');
+		this.includeRgb = (stripType === 'RGB' || stripType === 'RGBW');
+		this.includeWhite = (stripType === 'BRIGHTNESS' || stripType === 'RGBW');
+
+		if (includeRgb) {
+			leds.red = new Gpio(config.get('pinRed'), { mode: Gpio.OUTPUT });
+			leds.green = new Gpio(config.get('pinGreen'), { mode: Gpio.OUTPUT });
+			leds.blue = new Gpio(config.get('pinBlue'), { mode: Gpio.OUTPUT });
+		}
+		if (includeWhite) {
+			leds.white = new Gpio(config.get('pinWhite'), { mode: Gpio.OUTPUT });	
+		}
+	},
+
+	apply: function() {
+		var r, g, b, w;
+
+		console.log (this);
+
+		if (this.on) {
+			r = Math.round(Math.map(this.red, 0, 255, 0, this.brightness));
+			g = Math.round(Math.map(this.green, 0, 255, 0, this.brightness);
+			b = Math.round(Math.map(this.blue, 0, 255, 0, this.brightness));
+			w = Math.round(Math.map(this.white, 0, 255, 0, this.brightness));
+		} else {
+			r = 0;
+			g = 0;
+			b = 0;
+			w = 0;
+		}
+
+		if (this.includeRgb) {
+			this.leds.red.pwmWrite(r || 0);
+			this.leds.green.pwmWrite(g || 0);
+			this.leds.blue.pwmWrite(b || 0);
+		}
+		if (this.includeWhite) {
+			this.leds.white.pwmWrite(w || 0);
+		}
+	}
 };
 
-var leds = {};
-if (includeRgb) {
-	leds.red = new Gpio(config.get('pinRed'), { mode: Gpio.OUTPUT });
-	leds.green = new Gpio(config.get('pinGreen'), { mode: Gpio.OUTPUT });
-	leds.blue = new Gpio(config.get('pinBlue'), { mode: Gpio.OUTPUT });
-}
-if (includeWhite) {
-	leds.white = new Gpio(config.get('pinWhite'), { mode: Gpio.OUTPUT });	
-}
-
-function applyState() {
-	var r, g, b, w;
-
-	console.log (state);
-
-	if (state.on) {
-		r = Math.map(state.red, 0, 255, 0, state.brightness);
-		g = Math.map(state.green, 0, 255, 0, state.brightness);
-		b = Math.map(state.blue, 0, 255, 0, state.brightness);
-		w = Math.map(state.white, 0, 255, 0, state.brightness);
-	} else {
-		r = 0;
-		g = 0;
-		b = 0;
-		w = 0;
-	}
-
-	r = Math.round(Math.clamp(r, 0, 255));
-	g = Math.round(Math.clamp(g, 0, 255));
-	b = Math.round(Math.clamp(b, 0, 255));
-	w = Math.round(Math.clamp(w, 0, 255));
-
-	if (includeRgb) {
-		leds.red.pwmWrite(r);
-		leds.green.pwmWrite(g);
-		leds.blue.pwmWrite(b);
-	}
-	if (includeWhite) {
-		leds.white.pwmWrite(w);
-	}
-}
+state.init();
 
 function sendState() {
 	var data = {};
@@ -111,9 +108,9 @@ client.on('message', function (topic, message) {
 		}
 
 		if (data.color) {
-			state.red = +data.color.r || 0;
-			state.green = +data.color.g || 0;
-			state.blue = +data.color.b || 0;
+			state.red = +data.color.r;
+			state.green = +data.color.g;
+			state.blue = +data.color.b;
 		}
 
 		if (data.white_value) {
@@ -126,10 +123,10 @@ client.on('message', function (topic, message) {
 
 		//TODO implement effects
 
-		applyState();
+		state.apply();
 		sendState();
 	}
 });
 
 //make sure the pins are set to the initial state when started
-applyState();
+state.apply();
