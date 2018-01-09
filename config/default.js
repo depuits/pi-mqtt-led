@@ -10,10 +10,12 @@ var config = {
 	pinBlue: 0,		// For RGB(W)
 	pinWhite: 0,	// For BRIGHTNESS and RGBW
 
-	mqttHost: '{mqtt-server}', 
-	mqttPort: 1883,
-	mqttUsername: undefined,
-	mqttPassword: undefined,
+	mqtt: {
+		host: '127.0.0.1', 
+		port: 1883,
+		username: undefined,
+		password: undefined
+	},
 
 	mqttTopicState: 'home/PI_LED',
 	mqttTopicSet: 'home/PI_LED/set',

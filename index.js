@@ -7,12 +7,8 @@ const stripType = config.get('stripType');
 const includeRgb = (stripType === 'RGB' || stripType === 'RGBW');
 const includeWhite = (stripType === 'BRIGHTNESS' || stripType === 'RGBW');
 
-const client  = mqtt.connect({ 
-	host: config.get('mqttHost'), 
-	port: config.get('mqttPort'), 
-	username: config.get('mqttUsername'), 
-	password: config.get('mqttPassword')
-});
+var mqttConfig = Object.assign({}, config.get('mqtt')); // we copy the config because it must be editable
+const client  = mqtt.connect(mqttConfig);
 
 if (!Math.map) {
 	Math.map = function (val, in_min, in_max, out_min, out_max) {
@@ -23,7 +19,6 @@ if (!Math.clamp) {
 	Math.clamp = function (val, min, max) {
 		return Math.min(Math.max(min, val), max);
 	}
-
 }
 
 var state = {
