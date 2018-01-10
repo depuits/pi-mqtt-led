@@ -10,17 +10,17 @@ var config = {
 	pinBlue: 0,		// For RGB(W)
 	pinWhite: 0,	// For BRIGHTNESS and RGBW
 
+	payloadOn: 'ON',
+	payloadOff: 'OFF',
+
 	mqtt: {
 		host: '127.0.0.1', 
 		port: 1883,
 		username: undefined,
 		password: undefined
 	},
-
 	mqttTopicState: 'home/PI_LED',
-	mqttTopicSet: 'home/PI_LED/set',
-	mqttPayloadOn: 'ON',
-	mqttPayloadOff: 'OFF'
+	mqttTopicSet: 'home/PI_LED/set'
 };
 
 module.exports = config;
