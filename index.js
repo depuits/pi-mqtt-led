@@ -6,8 +6,10 @@ const client  = mqtt.connect(mqttConfig);
 
 const state = require('./lib/colorState')();
 const transition = require('./lib/effects/transition')(state);
+const colorFade = require('./lib/effects/colorFade')(state, transition);
 
 var effects = [
+	colorFade,
 	transition,
 	state
 ];

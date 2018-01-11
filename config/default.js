@@ -9,6 +9,11 @@ var config = {
 	pinGreen: 0,	// For RGB(W)
 	pinBlue: 0,		// For RGB(W)
 	pinWhite: 0,	// For BRIGHTNESS and RGBW
+	
+	// Reverse the LED logic
+	// false: 0 (off) - 255 (bright)
+	// true: 255 (off) - 0 (bright)
+	invertLedLogic: false,
 
 	payloadOn: 'ON',
 	payloadOff: 'OFF',
@@ -20,7 +25,12 @@ var config = {
 		password: undefined
 	},
 	mqttTopicState: 'home/PI_LED',
-	mqttTopicSet: 'home/PI_LED/set'
+	mqttTopicSet: 'home/PI_LED/set',
+
+	colorFade: {
+		timeSlow: 10,
+		timeFast: 3
+	}
 };
 
 module.exports = config;
