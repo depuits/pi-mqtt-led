@@ -1,3 +1,4 @@
+'use strict';
 const config = require('config');
 const mqtt = require('mqtt');
 
@@ -53,3 +54,10 @@ client.on('message', function (topic, message) {
 		sendState();
 	}
 });
+
+//export potentially usefull objects
+module.exports = {
+	mqtt: client,
+	state,
+	effects
+};
