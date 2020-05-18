@@ -9,44 +9,47 @@ To set this system up, you need to configure the [MQTT JSON light](https://home-
 1. In your `configuration.yaml`, add the following, depending on the supported features of the light:
 
     ```yaml
-    # Only one color:
-    light:
-      - platform: mqtt_json
-        name: mqtt_json_light_1
-        state_topic: "home/json_brightness"
-        command_topic: "home/json_brightness/set"
-        brightness: true
-        #effect: true
-        #effect_list: [flash]
-        optimistic: false
-        qos: 0
+ # Only one color:
+light:
+  - platform: mqtt
+    schema: json
+    name: mqtt_json_light_1
+    state_topic: "home/json_brightness"
+    command_topic: "home/json_brightness/set"
+    brightness: true
+    effect: true
+    effect_list: [flash]
+    optimistic: false
+    qos: 0
 
-    # RGB:
-    light:
-      - platform: mqtt_json
-        name: mqtt_json_light_2
-        state_topic: "home/rgb1"
-        command_topic: "home/rgb1/set"
-        brightness: true
-        rgb: true
-        effect: true
-        effect_list: [colorfade_slow, colorfade_fast] #, flash]
-        optimistic: false
-        qos: 0
+# RGB:
+light:
+  - platform: mqtt
+    schema: json
+    name: mqtt_json_light_2
+    state_topic: "home/rgb1"
+    command_topic: "home/rgb1/set"
+    brightness: true
+    rgb: true
+    effect: true
+    effect_list: [colorfade_slow, colorfade_fast, flash]
+    optimistic: false
+    qos: 0
 
-    # RGBW:
-    light:
-      - platform: mqtt_json
-        name: mqtt_json_light_3
-        state_topic: "home/rgbw1"
-        command_topic: "home/rgbw1/set"
-        brightness: true
-        rgb: true
-        white_value: true
-        effect: true
-        effect_list: [colorfade_slow, colorfade_fast] #, flash]
-        optimistic: false
-        qos: 0
+# RGBW:
+light:
+  - platform: mqtt
+    schema: json
+    name: mqtt_json_light_3
+    state_topic: "home/rgbw1"
+    command_topic: "home/rgbw1/set"
+    brightness: true
+    rgb: true
+    white_value: true
+    effect: true
+    effect_list: [colorfade_slow, colorfade_fast, flash]
+    optimistic: false
+    qos: 0
     ```
 2. Set the `name`, `state_topic`, and `command_topic` to values that make sense for you.
 3. Restart Home Assistant. Depending on how you installed it, the process differs. For a Raspberry Pi All-in-One install, use `sudo systemctl restart home-assistant.service` (or just restart the Pi).
@@ -62,6 +65,7 @@ This module depends on the [pigpio](https://www.npmjs.com/package/pigpio) librar
 
 #### Wiring
 For an RGB LED strip using N-MOSFETs for control, you'll want to wire it similar to this:
+**The resistors should be connected to the gate of the mosfet and not the drain which is displayed in the image**
 ![RGB Wiring](pi_rgb_led_bb.png)
 
 ## Differences from ESP8266 module
