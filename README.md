@@ -8,7 +8,7 @@ To set this system up, you need to configure the [MQTT JSON light](https://home-
 ### The Home Assistant Side
 1. In your `configuration.yaml`, add the following, depending on the supported features of the light:
 
-    ```yaml
+```yaml
  # Only one color:
 light:
   - platform: mqtt
@@ -50,7 +50,7 @@ light:
     effect_list: [colorfade_slow, colorfade_fast, flash]
     optimistic: false
     qos: 0
-    ```
+```
 2. Set the `name`, `state_topic`, and `command_topic` to values that make sense for you.
 3. Restart Home Assistant. Depending on how you installed it, the process differs. For a Raspberry Pi All-in-One install, use `sudo systemctl restart home-assistant.service` (or just restart the Pi).
 
