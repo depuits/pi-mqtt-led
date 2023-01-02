@@ -29,7 +29,7 @@
     "pigpio-mock": "0.0.1"
   },
   "dependencies": {
-    "config": "^3.0.1",
+    "config": "^3.3.8",
     "mqtt": "^2.18.8",
     "pigpio": "^1.2.1"
   }
