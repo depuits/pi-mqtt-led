@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "config": "^3.3.8",
-    "mqtt": "^2.18.8",
+    "mqtt": "^4.3.7",
     "pigpio": "^1.2.1"
   }
 }
